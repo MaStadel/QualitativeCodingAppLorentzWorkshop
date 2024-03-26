@@ -7,28 +7,60 @@ library(stringr)
 library(bslib)
 library(shinycssloaders)
 
+library(dplyr)
+library(shiny)
+library(stringi)
+
 #####################################################
 ########## Shiny App for Activity Coding ############
 
-# This shiny app can be used for coding the Activities
+# This shiny app can be used for coding activities
 
 # 1. Select the folder in which the codebook is stored and the results will be saved
 Projectwd <- "/Users/annalangener/Nextcloud/Shared/Testing Methods to Capture Social Context/Qualitative context/3. Coding/QualitativeCoding_Activies/"
 
 # 2. Select the path where the codebook is stored
-Codebook_Act <- read_excel(paste(Projectwd,"Codebook_shared_activities.xlsx",sep =""), sheet = 1)
+# IMPORTANT: The codes need to be in a column named "Code" and if levels are included, those need to be in a colomn called "Level"
+#Codebook_Act <- read_excel(paste(Projectwd,"Codebook_shared_activities.xlsx",sep =""), sheet = 1)
+Codebook_Act <- read.csv(paste(Projectwd,"NewCodebook_26032024.csv",sep =""))
 
 # 3. Select the path where the data is stored
 Act <- read.csv(paste(Projectwd,"Data/act_coding_ALL.csv",sep = ""))[,-1]
 
-# 4. Select who is coding
-User <- "Anna"  # "Marie"
+# 4. Select who is coding (a folder will be created if this is a new person)
+User <- "Marie_FullCoding"  # "Marie", "Anna"
 
-# 5. Select the participant of interest
-ppID <- 103
+# 5. Indicate how you column is named that includes the participant IDs and select the participant of interest
+id_column = "ppID" # Change the name of the column here
+ppID <- 102 
+
+# 6. Indicate whether your codebook contains different levels?
+Levels = TRUE
 
 #####################################################
 #####################################################
+
+
+
+## THE REST OF THE CODE DOES NOT NEED TO BE CHANGED ##
+
+# Here we create a dataframe that colors the different levels in the dropdown menu (if levels are included)
+if(Levels == TRUE){
+  Codebook_Act <- Codebook_Act[colnames(Codebook_Act) %in% c("Level","Code"),]
+t1 <- Codebook_Act %>%
+  mutate(html=ifelse(Level == '1', 
+                     paste0("<span style='color:#9F73AB';>", Code, "</span>"),
+                     ifelse(Level == '2',
+                            paste0("<span style='color:#19376D';>", Code, "</span>"),
+                            paste0("<span style='color:#0C7B93';>", Code, "</span>")
+                     )
+  ))
+Codebook_Act <- setNames(t1$Code, t1$html)
+}else{
+  Codebook_Act <- Codebook_Act$Code
+}
+
+###
 
 # Here we check if the specified user already has a subfolder
 if(!file.exists(paste(Projectwd,User, sep = ""))){
@@ -36,9 +68,9 @@ if(!file.exists(paste(Projectwd,User, sep = ""))){
 }
 
 # Next we prepare the dataframe for the selected participant
-Act_participant <- Act[Act$ppID == ppID,] # 326, 317, 318, 316, 309
+Act_participant <- Act[Act[id_column] == ppID,] # 326, 317, 318, 316, 309
 
-# If the participant is selected the first time we create an empty dataframe
+# If the participant is selected for the first time we create an empty dataframe
 if(!file.exists(paste(Projectwd,User,"/Act_",ppID,".csv",sep = ""))){
 Empty <- data.frame(Code = rep(NA,nrow(Act_participant)), OtherComments = rep(NA,nrow(Act_participant)))
 write.csv(Empty, paste(Projectwd,User,"/Act_",ppID,".csv",sep = ""))
@@ -48,10 +80,9 @@ write.csv(Empty, paste(Projectwd,User,"/Act_",ppID,".csv",sep = ""))
 # A lot of the code is copied from following github question
 ## https://github.com/rstudio/shiny/issues/1246
 
-
+if(Levels == TRUE){
 ui <- navbarPage("Qualitative Coding",
                  theme = bs_theme(version = 5, bootswatch = "minty"),
-                 header = "IMPORTANT: After switching the page, don't go back to the previous page without reloading the app. Otherwise the codes will NOT BE SAVED.",
                  #Code for JS I don't understand
                  tags$head(
                    tags$script('
@@ -61,14 +92,39 @@ ui <- navbarPage("Qualitative Coding",
                    )
                  ),
                  tabPanel("Output",id = "Week",
-                          # navlistPanel(widths = c(10, 2), "SidebarMenu",
-                          #              tabPanel(selectizeInput('case', 'Pick a case', selected="A", choices = c("A", "B"), multiple = FALSE)),
-                          #              tabPanel(numericInput('num', 'Number', min = 1, max = 10, value = 1, step = 1))),
-                                     withSpinner(DT::dataTableOutput('Act_participant'))),
-                
-                 
-)
-
+                          tags$p("IMPORTANT: After switching the page, don't go back to the previous page without reloading the app. Otherwise the codes will NOT BE SAVED."),
+                          tags$div(
+                            style = "border: 1px solid #9F73AB; padding: 5px; margin: 5px; display: inline-block;",
+                            tags$span("Level 1", style = "color: #9F73AB;")
+                          ),
+                          
+                          tags$div(
+                            style = "border: 1px solid #19376D; padding: 5px; margin: 5px; display: inline-block;",
+                            tags$span("Level 2", style = "color: #19376D;")
+                          ),
+                          
+                          tags$div(
+                            style = "border: 1px solid #0C7B93; padding: 5px; margin: 5px; display: inline-block;",
+                            tags$span("Level 3", style = "color: #0C7B93;")
+                          ),
+                          withSpinner(DT::dataTableOutput('Act_participant'))),
+      )
+}else{
+  ui <- navbarPage("Qualitative Coding",
+                   theme = bs_theme(version = 5, bootswatch = "minty"),
+                   #Code for JS I don't understand
+                   tags$head(
+                     tags$script('
+                  Shiny.addCustomMessageHandler("unbinding_table_elements", function(x) {                
+                  Shiny.unbindAll($(document.getElementById(x)).find(".dataTable"));
+                  });'
+                     )
+                   ),
+                   tabPanel("Output",id = "Week",
+                            tags$p("IMPORTANT: After switching the page, don't go back to the previous page without reloading the app. Otherwise the codes will NOT BE SAVED."),
+                            withSpinner(DT::dataTableOutput('Act_participant'))),
+  )
+}
 
 server <- function(session, input, output){
   
@@ -98,7 +154,14 @@ server <- function(session, input, output){
   ##################################################################
   
   for (i in 1:nrow(Act_participant)) {
-    subs_widget <- substitute({selectizeInput(paste0("selectize_code",i), NULL, choices=as.list(Codebook_Act[,1]),selected = c(unlist(str_split(Act[i,1]," ; "))),multiple = T)
+    subs_widget <- substitute({selectizeInput(paste0("selectize_code",i), NULL, choices=as.list(Codebook_Act),selected = c(unlist(str_split(Act[i,1]," ; "))),multiple = T,
+                                                options = list(render = I("
+                                                      {
+                                                        item: function(item, escape) { return '<div>' + item.label + '</div>'; },
+                                                        option: function(item, escape) { return '<div>' + item.label + '</div>'; }
+                                                      }"))
+                                              ) 
+      
     }, list(i = i))
     output[[paste0("selectize_wrap_code",i)]] <- renderUI(subs_widget, quoted = T)
     
