@@ -22,17 +22,21 @@ Projectwd <- "/Users/annalangener/Nextcloud/Shared/Testing Methods to Capture So
 # 2. Select the path where the codebook is stored
 # IMPORTANT: The codes need to be in a column named "Code" and if levels are included, those need to be in a column called "Level"
 #Codebook_Act <- read_excel(paste(Projectwd,"Codebook_shared_activities.xlsx",sep =""), sheet = 1)
-Codebook_Act <- read.csv(paste(Projectwd,"NewCodebook_26032024.csv",sep =""))
+Codebook <- "NewCodebook_26032024.csv" # Needed
+Codebook_Act <- read.csv(paste(Projectwd,Codebook,sep =""))
 
 # 3. Select the path where the data is stored
 Act <- read.csv(paste(Projectwd,"Data/act_coding_ALL.csv",sep = ""))[,-1]
+# The dataframe should be sorted by Date, to allow for context coding
+#Act <-  Act %>% arrange(ppID, timeStampStart)
+#write.csv(Act,paste(Projectwd,"Data/act_coding_ALL.csv",sep = ""))
 
 # 4. Select who is coding (a folder will be created if this is a new person)
-User <- "Anna_TestCoding"  # "Marie_FullCoding", "Marie", "Anna"
+User <- "Anna_TestCoding_2"  # "Marie_FullCoding", "Marie", "Anna"
 
 # 5. Indicate how you column is named that includes the participant IDs and select the participant of interest
 id_column = "ppID" # Change the name of the column here
-ppID <- 106 
+ppID <- 102 
 
 # 6. Indicate whether your codebook contains different levels?
 Levels = TRUE
@@ -92,7 +96,7 @@ ui <- navbarPage("Qualitative Coding",
                   });'
                    )
                  ),
-                 tabPanel("Output",id = "Week",
+                 tabPanel(Codebook,id = "Week",
                           tags$div(
                             style = "border: 1px solid #0C7B93; padding: 5px; margin: 5px; display: inline-block;",
                             tags$span("Level 3", style = "color: #0C7B93;")
@@ -119,21 +123,17 @@ ui <- navbarPage("Qualitative Coding",
                   });'
                      )
                    ),
-                   tabPanel("Output",id = "Week",
-                            tags$p("IMPORTANT: After switching the page, don't go back to the previous page without reloading the app. Otherwise the codes will NOT BE SAVED."),
+                   tabPanel(Codebook,id = "Week",
                             withSpinner(DT::dataTableOutput('Act_participant'))),
   )
 }
 
 server <- function(session, input, output){
-  
-  # Read existing Code/ Comments
-  Act <- read.csv(paste(Projectwd,User,"/Act_",ppID,".csv",sep = ""))[-1]
-  
+
   ###################### Create Datatable #####################
   #############################################################
   output$Act_participant <- DT::renderDataTable({
-    a <- Act_participant
+    a <- Act_participant # the static dataframe
     a$Code <- sapply(paste0("selectize_wrap_code",1:nrow(Act_participant)), function(x) as.character(uiOutput(x)))
     a$'Additional Information' <- sapply(paste0("selectize_wrap_additionalinfo",1:nrow(Act_participant)), function(x) as.character(uiOutput(x)))
     a$'Other/Comments' <- sapply(paste0("selectize_wrap_other",1:nrow(Act_participant)), function(x) as.character(uiOutput(x)))
@@ -148,13 +148,17 @@ server <- function(session, input, output){
   
   ################ rendering fancy selectize widgets ###############
   ##################################################################
+
+  proxy <- DT::dataTableProxy('Act_participant')
   
+  # Read existing Code/ Comments
+  #Act <- read.csv(paste(Projectwd,User,"/Act_",ppID,".csv",sep = ""))[-1]
   
-  # Render selectize inputs and textInputs
   observeEvent(input$Act_participant_rows_current, {
     Act <- read.csv(paste(Projectwd,User,"/Act_",ppID,".csv",sep = ""))[-1]
     print("Act dataframe reloaded")
     print(head(Act))
+  
     for (i in 1:nrow(Act_participant)) {
       subs_widget <- substitute({selectizeInput(paste0("selectize_code",i), NULL, choices=as.list(Codebook_Act),selected = c(unlist(str_split(Act[i,1]," ; "))),multiple = T,
                                                 options = list(render = I("
@@ -183,8 +187,10 @@ server <- function(session, input, output){
       }, list(i = i))
       output[[paste0("selectize_wrap_additionalinfo",i)]] <- renderUI(subs_widget3, quoted = T)
     }
+    
+    DT::reloadData(proxy, resetPaging = FALSE)
+
   })
-  
   
   
   ########### Save Code and Comments if Input changes ###########
