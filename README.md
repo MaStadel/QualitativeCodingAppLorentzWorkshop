@@ -7,15 +7,16 @@ several columns showing the raw observation (see screenshots below
 (such as feelings or who the activity was with). Our codes have a
 hierarchical structure and are therefore displayed in different colors.
 
-<img src="Example_app1.jpg" width="856" />
+![](Images/Example_app1.jpg)
 
 The codes appear interactively as you type.
 
-<img src="Example_app2.png" width="326" />
+<img src="Images/Example_app2.png" width="326" />
 
-To use this app, please download and open the app.R file. If desired,
-you can also download a codebook. We currently provide two options, one
-based on Stadel et al. 2024 (see
+To use this app, please download and open the app.R file in R studio
+(<https://posit.co/download/rstudio-desktop/>). If desired, you can also
+download a codebook. We currently provide two options, one based on
+Stadel et al. 2024 (see
 <https://annalangener.github.io/QualitativeVis/>) and one based on
 Skimina et al. 2020 (see
 <https://annalangener.github.io/QualitativeVis/Skimina.html>). It is
@@ -25,9 +26,16 @@ The app runs locally, so there are no privacy concerns when using it.
 
 ## How to use this app?
 
-In the following sections we explain how to set-up this app.
+The following sections explain how to set up this app. You only need to
+change the first few lines of code in the app. Here is a little more
+explanation of what you need to change.
 
-#### 1) Select the folder in which the codebook is stored and the results will be saved
+#### 1) Select the folder in which the codebook is stored and the results will be saved.
+
+First, you need to select your project folder where you want to save
+your coding results. Ideally, this folder will also contain the file
+where your codebook is stored. This can be any folder on your computer
+or in a cloud.
 
 ``` r
 # 1. Select the folder in which the codebook is stored and the results will be saved
@@ -35,6 +43,18 @@ Projectwd <- "/Users/annalangener/Nextcloud/Shared/Testing Methods to Capture So
 ```
 
 #### 2) Select the coding scheme that you want to use.
+
+Next you need to read in the codebook. In this example, we use the
+Codebook_Stadeletal.csv file, but in theory you can use any codebook.
+Below we also provide sample code to read a codebook stored in an Excel
+file. The codebook should look similar to this:
+
+<img src="Images/Codebook_Example.png" width="294" />
+
+**Important**: The codebook must contain a column named “Code”
+containing the codes. If desired, the codebook can contain a second
+column called “Level”. This can be used if the codes have a hierarchical
+structure and you want to display them in different colors.
 
 ``` r
 # 2. Select the coding scheme that you want to use. 
@@ -47,6 +67,17 @@ Codebook_Act <- read.csv(paste(Projectwd,Codebook,sep =""))
 
 #### 3) Select the path where the data is stored.
 
+Specify where your data will be stored in your project folder. In our
+example, we created a subfolder called “Data” that contains our data
+file. See the image below for an example of how our project folder is
+structured.
+
+<img src="Images/Example_app3.png" width="332" />
+
+To be able to code “context” (e.g. someone is on vacation), the
+dataframe should be sorted by date. Below we also provide sample code on
+how to do this.
+
 ``` r
 # 3. Select the path where the data is stored
 Data <- read.csv(paste(Projectwd,"Data/act_coding_ALL.csv",sep = ""))[,-1]
@@ -57,12 +88,28 @@ Data <- read.csv(paste(Projectwd,"Data/act_coding_ALL.csv",sep = ""))[,-1]
 
 #### 4) Select who is coding.
 
+The next step is to select who will be coding (this can be useful if
+more than one researcher is coding on a project). You can choose any
+name you like. If you choose a new username, a subfolder will
+automatically be created for that user. See image below:
+
 ``` r
 # 4. Select who is coding (a folder will be created if this is a new person)
-User <- "Anna_TestCoding"  # "Marie_FullCoding", "Marie", "Anna"
+User <- "Example_newuser"  # "Marie_FullCoding", "Marie", "Anna"
 ```
 
-#### 5) Select the folder in which the codebook is stored and the results will be saved
+Now, a new folder called “Example_newuser” **automatically** occurs in
+our project folder, that will store the results for that user.
+
+<img src="Images/Example_app4.png" width="296" />
+
+#### 5) Indicate how you column is named that includes the participant IDs and select the participant of interest.
+
+To reduce loading time and to be able to code the context of an
+observation, we load each participant’s data separately. The first time
+we load a participant’s data, a csv file is automatically created to
+store the coding results (until there are results to store, it will
+contain “NA”).
 
 ``` r
 # 5. Indicate how you column is named that includes the participant IDs and select the participant of interest
@@ -70,19 +117,23 @@ id_column = "ppID" # Change the name of the column here
 ppID <- 106 
 ```
 
+<img src="Images/Example_app5.png" width="271" />
+
 #### 6) Indicate whether your codebook contains different levels?
+
+You can set Levels to FALSE if your codebook does not have a
+hierarchical structure or if you do not want to display them in
+different colors.
 
 ``` r
 # 6. Indicate whether your codebook contains different levels?
-Levels = TRUE
-
-# 7. Click "Run App"
+Levels = TRUE #FALSE
 ```
 
 #### 7) Click “Run App”
 
-``` r
-# 7. Click "Run App"
-```
+Lastly, you only have to click “Run App”.
+
+![](Images/Example_app6.png)
 
 #### 
