@@ -7,6 +7,11 @@ several columns showing the raw observation (see screenshots below
 (such as feelings or who the activity was with). Our codes have a
 hierarchical structure and are therefore displayed in different colors.
 
+This app was build as part of the project “Assessing Daily Life
+Activities: Comparing Predefined Categories with the Qualitative
+Analysis of Open-Ended Responses in Experience Sampling Methodology
+(ESM)” Marie Stadel, Anna Langener, Laura Bringmann.
+
 ![](Images/Example_app1.jpg)
 
 The codes appear interactively as you type.
@@ -138,4 +143,7 @@ Lastly, you only have to click “Run App”.
 
 ![](Images/Example_app6.png)
 
-#### 
+## Questions/Problems?
+
+Write an email to a.m.langener\[at\]rug.nl, langener95\[at\]gmail.com,
+or m.stadel\[at\].rug.nl
