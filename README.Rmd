@@ -26,7 +26,7 @@ The app runs locally, so there are no privacy concerns when using it.
 
 ## How to use this app?
 
-The following sections explain how to set up this app. You only need to change the first few lines of code in the app. Here is a little more explanation of what you need to change.
+The following sections explain how to set up this app. You only need to change the first few lines of code in the app (Six lines in total). Here is a little more explanation of what you need to change.
 
 #### 1) Select the folder in which the codebook is stored and the results will be saved.
 
@@ -51,16 +51,16 @@ Next you need to read in the codebook. In this example, we use the Codebook_Stad
 # IMPORTANT: The codes need to be in a column named "Code" and if levels are included, those need to be in a column called "Level"
 #Codebook_Act <- read_excel(paste(Projectwd,"Codebook_shared_activities.xlsx",sep =""), sheet = 1)
 Codebook <- "Codebook_Stadeletal.csv" # Needed
-Codebook_Act <- read.csv(paste(Projectwd,Codebook,sep =""))
+Codebook_Act <- read.csv(paste(Projectwd,Codebook,sep ="")) 
 ```
 
 #### 3) Select the path where the data is stored.
 
-Specify where your data will be stored in your project folder. In our example, we created a subfolder called "Data" that contains our data file. See the image below for an example of how our project folder is structured.
+Specify where your data is stored in your project folder. In our example, we created a subfolder called "Data" that contains our data file. See the image below for an example of how our project folder is structured.
 
 ![](Images/Example_app3.png){width="332"}
 
-To be able to code "context" (e.g. someone is on vacation), the dataframe should be sorted by date. Below we also provide sample code on how to do this.
+To be able to code "context" (e.g. someone is on vacation), the dataframe should be sorted by date. Below we provide sample code on how to do this.
 
 ```{r }
 # 3. Select the path where the data is stored
@@ -72,18 +72,18 @@ Data <- read.csv(paste(Projectwd,"Data/act_coding_ALL.csv",sep = ""))[,-1]
 
 #### 4) Select who is coding.
 
-The next step is to select who will be coding (this can be useful if more than one researcher is coding on a project). You can choose any name you like. If you choose a new username, a subfolder will automatically be created for that user. See image below:
+The next step is to select who will be coding (this can be useful if more than one researcher is coding on a project). You can choose any name you like. If you choose a new username, a subfolder will automatically be created for that user (see image below), if an "old" user is selected, the previous codes will be read into the app and the user can continue coding where they left off.
 
 ```{r }
 # 4. Select who is coding (a folder will be created if this is a new person)
 User <- "Example_newuser"  # "Marie_FullCoding", "Marie", "Anna"
 ```
 
-Now, a new folder called "Example_newuser" **automatically** occurs in our project folder, that will store the results for that user.
+In this example, a new folder named "Example_newuser" **automatically** be created in our project folder to store the results for this user.
 
 ![](Images/Example_app4.png){width="296"}
 
-#### 5) Indicate how you column is named that includes the participant IDs and select the participant of interest.
+#### 5) Indicate how your column is named that includes the participant IDs and select the participant that you want to code
 
 To reduce loading time and to be able to code the context of an observation, we load each participant's data separately. The first time we load a participant's data, a csv file is automatically created to store the coding results (until there are results to store, it will contain "NA").
 
@@ -95,7 +95,7 @@ ppID <- 106
 
 ![](Images/Example_app5.png){width="271"}
 
-#### 6) Indicate whether your codebook contains different levels?
+#### 6) Indicate whether your codebook contains different levels.
 
 You can set Levels to FALSE if your codebook does not have a hierarchical structure or if you do not want to display them in different colors.
 
