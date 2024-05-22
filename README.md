@@ -21,9 +21,11 @@ The codes appear interactively as you type.
 To use this app, please download and open the app.R file in R studio
 (<https://posit.co/download/rstudio-desktop/>). If desired, you can also
 download a codebook. We currently provide two options, one based on
-Stadel et al. 2024 (see
+Stadel et al. 2024
+([Codebook_Stadeletal.csv](https://github.com/AnnaLangener/QualitativeCodingApp/blob/Anna_Tests/Codebook_Stadeletal.csv "Codebook_Stadeletal.csv"):
 <https://annalangener.github.io/QualitativeVis/>) and one based on
-Skimina et al. 2020 (see
+Skimina et al. 2020
+([Codebook_Skiminiaetal.csv](https://github.com/AnnaLangener/QualitativeCodingApp/blob/Anna_Tests/Codebook_Skiminiaetal.csv "Codebook_Skiminiaetal.csv"):
 <https://annalangener.github.io/QualitativeVis/Skimina.html>). It is
 also possible to use your own codebook.
 
