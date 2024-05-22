@@ -19,24 +19,25 @@ library(stringi)
 # 1. Select the folder in which the codebook is stored and the results will be saved
 Projectwd <- "/Users/annalangener/Nextcloud/Shared/Testing Methods to Capture Social Context/Qualitative context/3. Coding/QualitativeCoding_Activies/"
 
-# 2. Select the path where the codebook is stored
+# 2. Select the coding scheme that you want to use. 
+# You can choose our proposed coding scheme, the coding scheme proposed by Skimina et al., or you own by specify the path where the codebook is stored
 # IMPORTANT: The codes need to be in a column named "Code" and if levels are included, those need to be in a column called "Level"
 #Codebook_Act <- read_excel(paste(Projectwd,"Codebook_shared_activities.xlsx",sep =""), sheet = 1)
 Codebook <- "NewCodebook_26032024.csv" # Needed
 Codebook_Act <- read.csv(paste(Projectwd,Codebook,sep =""))
 
 # 3. Select the path where the data is stored
-Act <- read.csv(paste(Projectwd,"Data/act_coding_ALL.csv",sep = ""))[,-1]
+Data <- read.csv(paste(Projectwd,"Data/act_coding_ALL.csv",sep = ""))[,-1]
 # The dataframe should be sorted by Date, to allow for context coding
-#Act <-  Act %>% arrange(ppID, timeStampStart)
-#write.csv(Act,paste(Projectwd,"Data/act_coding_ALL.csv",sep = ""))
+#Data <-  Data %>% arrange(ppID, timeStampStart)
+#write.csv(Data,paste(Projectwd,"Data/act_coding_ALL.csv",sep = ""))
 
 # 4. Select who is coding (a folder will be created if this is a new person)
 User <- "Anna_TestCoding_2"  # "Marie_FullCoding", "Marie", "Anna"
 
 # 5. Indicate how you column is named that includes the participant IDs and select the participant of interest
 id_column = "ppID" # Change the name of the column here
-ppID <- 102 
+ppID <- 106 
 
 # 6. Indicate whether your codebook contains different levels?
 Levels = TRUE
@@ -74,7 +75,7 @@ if(!file.exists(paste(Projectwd,User, sep = ""))){
 }
 
 # Next we prepare the dataframe for the selected participant
-Act_participant <- Act[Act[id_column] == ppID,] # 326, 317, 318, 316, 309
+Act_participant <- Data[Data[id_column] == ppID,] # 326, 317, 318, 316, 309
 
 # If the participant is selected for the first time we create an empty dataframe
 if(!file.exists(paste(Projectwd,User,"/Act_",ppID,".csv",sep = ""))){
@@ -88,14 +89,6 @@ write.csv(Empty, paste(Projectwd,User,"/Act_",ppID,".csv",sep = ""))
 if(Levels == TRUE){
 ui <- navbarPage("Qualitative Coding",
                  theme = bs_theme(version = 5, bootswatch = "minty"),
-                 #Code for JS I don't understand
-                 tags$head(
-                   tags$script('
-                  Shiny.addCustomMessageHandler("unbinding_table_elements", function(x) {                
-                  Shiny.unbindAll($(document.getElementById(x)).find(".dataTable"));
-                  });'
-                   )
-                 ),
                  tabPanel(Codebook,id = "Week",
                           tags$div(
                             style = "border: 1px solid #0C7B93; padding: 5px; margin: 5px; display: inline-block;",
@@ -115,14 +108,6 @@ ui <- navbarPage("Qualitative Coding",
 }else{
   ui <- navbarPage("Qualitative Coding",
                    theme = bs_theme(version = 5, bootswatch = "minty"),
-                   #Code for JS I don't understand
-                   tags$head(
-                     tags$script('
-                  Shiny.addCustomMessageHandler("unbinding_table_elements", function(x) {                
-                  Shiny.unbindAll($(document.getElementById(x)).find(".dataTable"));
-                  });'
-                     )
-                   ),
                    tabPanel(Codebook,id = "Week",
                             withSpinner(DT::dataTableOutput('Act_participant'))),
   )
@@ -149,18 +134,19 @@ server <- function(session, input, output){
   ################ rendering fancy selectize widgets ###############
   ##################################################################
 
-  proxy <- DT::dataTableProxy('Act_participant')
+  #proxy <- DT::dataTableProxy('Act_participant')
   
   # Read existing Code/ Comments
-  #Act <- read.csv(paste(Projectwd,User,"/Act_",ppID,".csv",sep = ""))[-1]
+  Act <- read.csv(paste(Projectwd,User,"/Act_",ppID,".csv",sep = ""))[-1]
   
   observeEvent(input$Act_participant_rows_current, {
     Act <- read.csv(paste(Projectwd,User,"/Act_",ppID,".csv",sep = ""))[-1]
     print("Act dataframe reloaded")
     print(head(Act))
   
+    # This has to be in there otherwise its saved but not loaded    
     for (i in 1:nrow(Act_participant)) {
-      subs_widget <- substitute({selectizeInput(paste0("selectize_code",i), NULL, choices=as.list(Codebook_Act),selected = c(unlist(str_split(Act[i,1]," ; "))),multiple = T,
+      subs_widget <- substitute({selectizeInput(paste0("selectize_code",i), NULL, choices=as.list(Codebook_Act), selected = c(unlist(str_split(Act[i,1]," ; "))), multiple = T,
                                                 options = list(render = I("
                                                       {
                                                         item: function(item, escape) { return '<div>' + item.label + '</div>'; },
@@ -188,9 +174,9 @@ server <- function(session, input, output){
       output[[paste0("selectize_wrap_additionalinfo",i)]] <- renderUI(subs_widget3, quoted = T)
     }
     
-    DT::reloadData(proxy, resetPaging = FALSE)
-
+   # DT::reloadData(proxy, resetPaging = FALSE)
   })
+
   
   
   ########### Save Code and Comments if Input changes ###########
