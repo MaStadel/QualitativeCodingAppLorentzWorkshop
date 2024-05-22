@@ -1,3 +1,47 @@
+#####################################################
+########## Shiny App for Activity Coding ############
+#####################################################
+
+# This shiny app can be used for coding activities
+
+# 1. Select the folder in which the codebook is stored and the results will be saved
+Projectwd <- "/Users/annalangener/Nextcloud/Shared/Testing Methods to Capture Social Context/Qualitative context/3. Coding/QualitativeCoding_Activies/"
+
+# 2. Select the coding scheme that you want to use. 
+# You can choose our proposed coding scheme, the coding scheme proposed by Skimina et al., or you own by specify the path where the codebook is stored
+# IMPORTANT: The codes need to be in a column named "Code" and if levels are included, those need to be in a column called "Level"
+#Codebook_Act <- read_excel(paste(Projectwd,"Codebook_shared_activities.xlsx",sep =""), sheet = 1)
+Codebook <- "Codebook_Stadeletal.csv" # Needed
+Codebook_Act <- read.csv(paste(Projectwd,Codebook,sep =""))
+
+# 3. Select the path where the data is stored
+Data <- read.csv(paste(Projectwd,"Data/act_coding_ALL.csv",sep = ""))[,-1]
+# The dataframe should be sorted by Date, to allow for context coding
+#Data <-  Data %>% arrange(ppID, timeStampStart)
+#write.csv(Data,paste(Projectwd,"Data/act_coding_ALL.csv",sep = ""))
+
+# 4. Select who is coding (a folder will be created if this is a new person)
+User <- "Anna_TestCoding"  # "Marie_FullCoding", "Marie", "Anna"
+
+# 5. Indicate how you column is named that includes the participant IDs and select the participant of interest
+id_column = "ppID" # Change the name of the column here
+ppID <- 106 
+
+# 6. Indicate whether your codebook contains different levels?
+Levels = TRUE
+
+# 7. Click "Run App"
+
+
+#####################################################
+#####################################################
+## THE REST OF THE CODE DOES NOT NEED TO BE CHANGED ##
+
+# A lot of the code that creates the table is copied from following github question
+## https://github.com/rstudio/shiny/issues/1246
+
+## THE REST OF THE CODE DOES NOT NEED TO BE CHANGED ##
+
 ###### Load Packages
 
 library(shiny)
@@ -11,44 +55,7 @@ library(dplyr)
 library(shiny)
 library(stringi)
 
-#####################################################
-########## Shiny App for Activity Coding ############
-
-# This shiny app can be used for coding activities
-
-# 1. Select the folder in which the codebook is stored and the results will be saved
-Projectwd <- "/Users/annalangener/Nextcloud/Shared/Testing Methods to Capture Social Context/Qualitative context/3. Coding/QualitativeCoding_Activies/"
-
-# 2. Select the coding scheme that you want to use. 
-# You can choose our proposed coding scheme, the coding scheme proposed by Skimina et al., or you own by specify the path where the codebook is stored
-# IMPORTANT: The codes need to be in a column named "Code" and if levels are included, those need to be in a column called "Level"
-#Codebook_Act <- read_excel(paste(Projectwd,"Codebook_shared_activities.xlsx",sep =""), sheet = 1)
-Codebook <- "NewCodebook_26032024.csv" # Needed
-Codebook_Act <- read.csv(paste(Projectwd,Codebook,sep =""))
-
-# 3. Select the path where the data is stored
-Data <- read.csv(paste(Projectwd,"Data/act_coding_ALL.csv",sep = ""))[,-1]
-# The dataframe should be sorted by Date, to allow for context coding
-#Data <-  Data %>% arrange(ppID, timeStampStart)
-#write.csv(Data,paste(Projectwd,"Data/act_coding_ALL.csv",sep = ""))
-
-# 4. Select who is coding (a folder will be created if this is a new person)
-User <- "Anna_TestCoding_2"  # "Marie_FullCoding", "Marie", "Anna"
-
-# 5. Indicate how you column is named that includes the participant IDs and select the participant of interest
-id_column = "ppID" # Change the name of the column here
-ppID <- 106 
-
-# 6. Indicate whether your codebook contains different levels?
-Levels = TRUE
-
-#####################################################
-#####################################################
-## THE REST OF THE CODE DOES NOT NEED TO BE CHANGED ##
-
-# A lot of the code that creates the table is copied from following github question
-## https://github.com/rstudio/shiny/issues/1246
-
+#######
 
 ######### Create different colors for levels #########
 # Here we create a dataframe that colors the different levels in the dropdown menu (if levels are included)
