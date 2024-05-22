@@ -7,11 +7,11 @@ several columns showing the raw observation (see screenshots below
 (such as feelings or who the activity was with). Our codes have a
 hierarchical structure and are therefore displayed in different colors.
 
-<img src="Example_app1.jpg" width="556" />
+<img src="Example_app1.jpg" width="856" />
 
 The code appears interactively as you type.
 
-<img src="Example_app2.png" width="226" />
+<img src="Example_app2.png" width="326" />
 
 To use this app, please download and open the app.R file. If desired,
 you can also download a codebook. We currently provide two options, one
