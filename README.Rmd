@@ -112,6 +112,10 @@ Lastly, you only have to click "Run App".
 
 ![](Images/Example_app6.png)
 
+## Analyze the data
+
+This repository also contains some simple R code to start analyzing the data: [Results_Analysis.Rmd](https://github.com/AnnaLangener/QualitativeCodingApp/blob/Anna_Tests/Results_Analysis.Rmd "Results_Analysis.Rmd"). For example, we provide some code to read the results from each participant and calculate the frequency of how often a particular code was used.
+
 ## Questions/Problems?
 
 Write an email to a.m.langener[at]rug.nl, langener95[at]gmail.com, or m.stadel[at].rug.nl
