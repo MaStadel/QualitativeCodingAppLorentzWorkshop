@@ -1,7 +1,7 @@
 ## Shiny App to Code Qualitative ESM data
 
 Here we provide a shiny app that can be used by other researchers to
-code qualitative ESM data based on a given coding scheme. It contains
+code open-ended ESM data based on a given coding scheme. It contains
 several columns showing the raw observation (see screenshots below
 “activity_open”), the given code (“Code”), and additional information
 (such as feelings or who the activity was with). Our codes have a
@@ -65,7 +65,8 @@ structure and you want to display them in different colors.
 
 ``` r
 # 2. Select the coding scheme that you want to use. 
-# You can choose our proposed coding scheme, the coding scheme proposed by Skimina et al., or you own by specify the path where the codebook is stored
+# You can choose our proposed coding scheme, the coding scheme proposed by Skimina et al., or you own by specify the path where the codebook is stored.
+# For this workshop we will use the Codebook_responseprocess.csv file.
 # IMPORTANT: The codes need to be in a column named "Code" and if levels are included, those need to be in a column called "Level"
 #Codebook_Act <- read_excel(paste(Projectwd,"Codebook_shared_activities.xlsx",sep =""), sheet = 1)
 Codebook <- "Codebook_Stadeletal.csv" # Needed
@@ -78,12 +79,13 @@ Specify where your data is stored in your project folder. In our
 example, we created a subfolder called “Data” that contains our data
 file. See the image below for an example of how our project folder is
 structured.
+For this workshop we will use the data_respproc.csv file. 
 
 <img src="Images/Example_app3.png" width="332" />
 
-To be able to code “context” (e.g. someone is on vacation), the
-dataframe should be sorted by date. Below we provide sample code on how
-to do this.
+To be able to code activities / events spanning over multiple observations 
+(e.g. someone is on vacation), the dataframe should be sorted by date. 
+Below we provide sample code on how to do this.
 
 ``` r
 # 3. Select the path where the data is stored
@@ -122,8 +124,8 @@ contain “NA”).
 
 ``` r
 # 5. Indicate how you column is named that includes the participant IDs and select the participant of interest
-id_column = "ppID" # Change the name of the column here
-ppID <- 106 
+id_column = "ppID" # Change the name of the column here; for the workshop this is not needed 
+ppID <- 1 # Choose a participant you want to code, the ids range from 1 until 11
 ```
 
 <img src="Images/Example_app5.png" width="271" />
