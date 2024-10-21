@@ -19,17 +19,11 @@ The codes appear interactively as you type.
 <img src="Images/Example_app2.png" width="326" />
 
 To use this app, please download and open the app.R file in R studio
-(<https://posit.co/download/rstudio-desktop/>). If desired, you can also
-download a codebook. We currently provide two options, one based on
-Stadel et al. 2024
-([Codebook_Stadeletal.csv](https://github.com/AnnaLangener/QualitativeCodingApp/blob/Anna_Tests/Codebook_Stadeletal.csv "Codebook_Stadeletal.csv"):
-<https://annalangener.github.io/QualitativeVis/>) and one based on
-Skimina et al. 2020
-([Codebook_Skiminiaetal.csv](https://github.com/AnnaLangener/QualitativeCodingApp/blob/Anna_Tests/Codebook_Skiminiaetal.csv "Codebook_Skiminiaetal.csv"):
-<https://annalangener.github.io/QualitativeVis/Skimina.html>). It is
-also possible to use your own codebook.
+(<https://posit.co/download/rstudio-desktop/>). 
 
-The app runs locally, so there are no privacy concerns when using it.
+Additionally you will need a datafile and codebook. For this workshop
+we will use the data_respproc.csv datafile and the Codebook_responseprocess.csv
+codebook file that you can both download from this repository. 
 
 ## How to use this app?
 
@@ -42,7 +36,8 @@ is a little more explanation of what you need to change.
 First, you need to select your project folder where you want to save
 your coding results. Ideally, this folder will also contain the file
 where your codebook is stored. This can be any folder on your computer
-or in a cloud.
+or in a cloud. When typing the filepath for the directory, make sure 
+there is a slash / at the end. 
 
 ``` r
 # 1. Select the folder in which the codebook is stored and the results will be saved
@@ -51,8 +46,7 @@ Projectwd <- "/Users/annalangener/Nextcloud/Shared/Testing Methods to Capture So
 
 #### 2) Select the coding scheme that you want to use.
 
-Next you need to read in the codebook. In this example, we use the
-Codebook_Stadeletal.csv file, but in theory you can use any codebook.
+Next you need to read in the codebook. 
 Below we also provide sample code to read a codebook stored in an Excel
 file. The codebook should look similar to this:
 
@@ -78,8 +72,7 @@ Codebook_Act <- read.csv(paste(Projectwd,Codebook,sep =""))
 Specify where your data is stored in your project folder. In our
 example, we created a subfolder called “Data” that contains our data
 file. See the image below for an example of how our project folder is
-structured.
-For this workshop we will use the data_respproc.csv file. 
+structured. 
 
 <img src="Images/Example_app3.png" width="332" />
 
