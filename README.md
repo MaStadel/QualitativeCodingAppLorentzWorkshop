@@ -22,8 +22,10 @@ To use this app, please download and open the app.R file in R studio
 (<https://posit.co/download/rstudio-desktop/>). 
 
 Additionally you will need a datafile and codebook. For this workshop
-we will use the data_respproc.csv datafile and the Codebook_responseprocess.csv
-codebook file that you can both download from this repository. 
+we will use the following files: 
+data_respproc.csv (to be downloaded from the google drive workshop folder)
+Codebook_responseprocess.csv (to be downloaded from this repository)
+
 
 ## How to use this app?
 
