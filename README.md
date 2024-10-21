@@ -18,8 +18,7 @@ The codes appear interactively as you type.
 
 <img src="Images/Example_app2.png" width="326" />
 
-To use this app, please download and open the app.R file in R studio
-(<https://posit.co/download/rstudio-desktop/>). 
+To use this app, please download and open the app_Lorentz.R file in R studio. 
 
 Additionally you will need a datafile and codebook. For this workshop
 we will use the following files: 
